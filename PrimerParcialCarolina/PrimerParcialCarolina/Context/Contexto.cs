@@ -7,5 +7,5 @@ namespace PrimerParcialCarolina.Context;
     {
         public Contexto(DbContextOptions<Contexto> options) : base(options){}
 
-        public virtual DbSet<Model1> Model1s { get; set; }
+        public virtual DbSet<Autores> Autores { get; set; }
     }

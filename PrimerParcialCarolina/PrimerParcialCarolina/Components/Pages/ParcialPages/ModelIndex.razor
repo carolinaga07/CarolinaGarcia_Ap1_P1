@@ -27,6 +27,9 @@
                     </div>
                 </div>
                 @*Quickgrid*@
+                <QuickGrid Items="ListaAutores.AsQueryable()" class="table table-hover">
+                    <PropertyColumn Property=""></PropertyColumn>></PropertyColumn>
+                </QuickGrid>
                
             </div>
         </div>
@@ -41,9 +44,16 @@
 @code {
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
+    public List<Autores> ListaAutores = new List<Autores>();
+
 
     private void Buscar()
     {
-        throw new NotImplementedException();
+        if (ValorFiltro.Trim() == "")
+        {
+            
+        }
     }
+
+    
 }
