@@ -6,5 +6,6 @@ namespace PrimerParcialCarolina.Models
     {
         [Key]
         public int MyProperty { get; set; }
+        public object ModelId { get; internal set; }
     }
 }

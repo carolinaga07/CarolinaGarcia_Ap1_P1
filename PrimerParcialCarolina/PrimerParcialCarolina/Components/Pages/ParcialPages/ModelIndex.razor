@@ -1,4 +1,5 @@
 ﻿@page "/model1"
+@using Microsoft.AspNetCore.Components.QuickGrid
 @inject Model1Service model1Service
 @inject ToastService toastService
 
@@ -26,13 +27,16 @@
                     </div>
                 </div>
                 @*Quickgrid*@
+               
             </div>
         </div>
         @*Footer*@
+        
     </div>
 </div>
 
 @*ModalEliminar*@
+
 
 @code {
     public string Filtro { get; set; } = string.Empty;
