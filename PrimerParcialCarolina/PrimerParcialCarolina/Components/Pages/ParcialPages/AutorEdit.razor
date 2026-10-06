@@ -1,4 +1,4 @@
-﻿@page "/autores/edit/{modelid:int}"
+﻿@page "/autores/edit/{AutorId:int}"
 @rendermode InteractiveServer
 @inject AutoresService autoresService
 @inject NavigationManager navigationManager
@@ -44,6 +44,9 @@
 
 
 @code {
+    [Parameter]
+    public int AutorId { get; set; }
+
     private Autores autores = new Autores();
 
     public async Task OnInitializedAsync()

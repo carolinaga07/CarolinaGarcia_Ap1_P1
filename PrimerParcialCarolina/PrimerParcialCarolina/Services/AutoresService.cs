@@ -44,13 +44,13 @@ namespace PrimerParcialCarolina.Services
         public async Task<Autores?> Buscar(int AutorId)
         {
             await using var contexto = await contextFactory.CreateDbContextAsync();
-            return await contexto.Autores.AsNoTracking().FirstOrDefault(a => a.AutorId == AutorId);
+            return contexto.Autores.AsNoTracking().FirstOrDefault(a => a.AutorId == AutorId);
         }
 
         public async Task<bool> Eliminar(int AutorId)
         {
             await using var contexto = await contextFactory.CreateDbContextAsync();
-            return await contexto.Autores.Where(a => a.AutorId == AutorId).ExecuteDeleteAsync() > 0;//.where
+            return await contexto.Autores.Where(a => a.AutorId == AutorId).ExecuteDeleteAsync() > 0;
         }
 
         public async Task<List<Autores>> GetList(Expression<Func<Autores, bool>> criterio)

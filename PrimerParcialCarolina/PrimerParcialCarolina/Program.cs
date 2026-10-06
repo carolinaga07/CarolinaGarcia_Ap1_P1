@@ -10,7 +10,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 //Inyeccion del contexto
-var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
+var ConStr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConStr));
 
 //inyeccion de los services
