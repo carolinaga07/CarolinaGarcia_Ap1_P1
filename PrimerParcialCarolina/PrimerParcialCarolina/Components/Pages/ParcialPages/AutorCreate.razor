@@ -1,0 +1,63 @@
+﻿@page "/autores/create"
+@inject AutoresService autoresService
+@inject NavigationManager navigationManager
+@inject ToastService toastService
+
+<PageTitle>Create</PageTitle>
+<EditForm Model="autores" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator/>
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5 class="card-title">Crear Autor</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label"><strong>AutorId</strong></label>
+                    <InputNumber class="form-control" @bind-Value="autores.AutorId"></InputNumber>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Nombres</strong></label>
+                    <InputText class="form-control" @bind-Value="autores.Nombres"></InputText>
+                    <ValidationMessage For="() => autores.Nombres"></ValidationMessage>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Nacionalidad</strong></label>
+                    <InputText class="form-control" @bind-Value="autores.Nacionalidad"></InputText>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Fecha de nacimiento</strong></label>
+                    <InputDate class="form-control" @bind-Value="autores.FechaNacimiento"></InputDate>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Sueldo</strong></label>
+                    <InputNumber class="form-control" @bind-Value="autores.Sueldo"></InputNumber>
+                    <ValidationMessage For="() => autores.Sueldo"></ValidationMessage>
+                </div>
+            </div>
+            <div class="card-footer text-center mt-2">
+                <a href="/autores" class="btn btn-secondary"><span class="bi bi-arrow-left"> Volver</span></a>
+                <button type="submit" class="btn btn-primary bi bi-floopy"> Guardar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    private Autores autores = new Autores();
+
+    private async Task Guardar()
+    {
+        var Exito = await autoresService.Guardar(autores);
+        if (Exito)
+        {
+            toastService.ShowSuccess("El autor fue guardado correctamente.");
+            navigationManager.NavigateTo("/autores");
+        }
+        else
+        {
+            toastService.ShowError("Hubo un problema al guardar el autor.");
+        }
+    }
+}

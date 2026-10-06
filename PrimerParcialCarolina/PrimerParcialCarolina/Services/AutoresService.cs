@@ -9,36 +9,54 @@ namespace PrimerParcialCarolina.Services
     {
          public async Task<bool> Guardar(Autores autores)
         {
-            if(!await Existe)
+            if(!await Existe(autores.AutorId))
+            {
+                return await Insertar(autores);
+            }
+            else
+            {
+                return await Modificar(autores);
+
+            }
         }
         
-         private async Task<bool> Existe (int id)
+         private async Task<bool> Existe (int AutorId)
          {
-
+            await using var contexto = await contextFactory.CreateDbContextAsync();
+            return await contexto.Autores.AnyAsync(a => a.AutorId == AutorId);
          }
 
-          private async Task<bool> Insertar(Model1 model1)
+          private async Task<bool> Insertar(Autores autores)
           {
+            await using var contexto = await contextFactory.CreateDbContextAsync();
+            contexto.Autores.Add(autores);
+            return await contexto.SaveChangesAsync() > 0;
 
           }
 
-          private async Task<bool> Modificar(Model1 model1)
+          private async Task<bool> Modificar(Autores autores)
           {
+            await using var contexto = await contextFactory.CreateDbContextAsync();
+            contexto.Autores.Update(autores);
+            return await contexto.SaveChangesAsync() > 0;
 
           }
-        public Task<Autores?> Buscar(int id)
+        public async Task<Autores?> Buscar(int AutorId)
         {
-            throw new NotImplementedException();//.asnottracking.firstordefault
+            await using var contexto = await contextFactory.CreateDbContextAsync();
+            return await contexto.Autores.AsNoTracking().FirstOrDefault(a => a.AutorId == AutorId);
         }
 
-        public Task<bool> Eliminar(int id)
+        public async Task<bool> Eliminar(int AutorId)
         {
-            throw new NotImplementedException();//.where
+            await using var contexto = await contextFactory.CreateDbContextAsync();
+            return await contexto.Autores.Where(a => a.AutorId == AutorId).ExecuteDeleteAsync() > 0;//.where
         }
 
-        public Task<List<Autores>> GetList(Expression<Func<Autores, bool>> criterio)
+        public async Task<List<Autores>> GetList(Expression<Func<Autores, bool>> criterio)
         {
-            throw new NotImplementedException();//.where
+            await using var contexto = await contextFactory.CreateDbContextAsync();
+            return await contexto.Autores.Where(criterio).AsNoTracking().ToListAsync();
         }
 
        
