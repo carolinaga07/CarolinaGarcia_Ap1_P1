@@ -1,6 +1,5 @@
 ﻿@page "/autores"
 @inject AutoresService autoresService
-@inject ToastService toastService
 
 <PageTitle>Registro de Autores</PageTitle>
 <div class="container">
@@ -34,7 +33,6 @@
                     <PropertyColumn Property="a => a.Sueldo" title="Sueldo" Sortable="true" />
                     <TemplateColumn>
                         <a href="/autores/edit/@context.AutorId" class="btn btn-outline-primary bi bi-pencil-square"></a>
-                        <button type="button" class="btn btn-outline-danger bi bi-trash" data-bs-toggle="modal" data-bs-target="#modalEliminar" @onclick="()=> mostrarModal(context)"></button>
                     </TemplateColumn>
                 </QuickGrid>
             </div>
@@ -47,39 +45,12 @@
     </div>
 </div>
 
-@*ModalEliminar*@
-<div class="modal fade" id="modalEliminar" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirmar Eliminacion</h5>
-                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                @if(AutorAEliminar != null)
-                {
-                    <p>Deseas eliminar el siguiente autor?</p>
-                    <p>AutorId:@AutorAEliminar.AutorId</p>
-                    <p>Nombres:@AutorAEliminar.Nombres</p>
-                    <p>Nacionalidad:@AutorAEliminar.Nacionalidad</p>
-                    <p>Fecha de nacimiento:@AutorAEliminar.FechaNacimiento</p>
-                    <p>Sueldo:@AutorAEliminar.Sueldo</p>
-                }
-            </div>
-            <div class="modal-footer text-center mt-2">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Cancelar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="ConfirmarEliminar"> Eliminar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 @code {
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
     public List<Autores> ListaAutores = new List<Autores>();
-    private Autores? AutorAEliminar;
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,29 +71,6 @@
         if (Filtro == "Nacionalidad")
         {
             ListaAutores = await autoresService.GetList(a => a.Nacionalidad.ToLower().Contains(ValorFiltro.ToLower()));
-        }
-
-    }
-
-    private void mostrarModal(Autores autores)
-    {
-        AutorAEliminar = autores;
-    }
-
-    private async Task ConfirmarEliminar()
-    {
-        if(AutorAEliminar == null)
-        {
-            return;
-        }
-        if(await autoresService.Eliminar(AutorAEliminar.AutorId))
-        {
-            toastService.ShowSuccess("Autor eliminado correctamente.");
-            ListaAutores = await autoresService.GetList(a => a.AutorId > 0); 
-        }
-        else
-        {
-            toastService.ShowError("Autor no eliminado.");
         }
     }
 }

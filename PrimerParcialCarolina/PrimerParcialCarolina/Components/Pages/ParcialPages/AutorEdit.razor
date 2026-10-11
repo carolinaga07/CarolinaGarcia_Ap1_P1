@@ -40,17 +40,47 @@
             <div class="card-footer text-center mt-2">
                 <a href="/autores" class="btn btn-secondary"><span class="bi bi-arrow-left"> Volver</span></a>
                 <button type="submit" class="btn btn-primary bi bi-floppy"> Guardar</button>
+                <button type="button" class="btn btn-outline-danger bi bi-trash" data-bs-toggle="modal" data-bs-target="#modalEliminar"> Eliminar</button>
             </div>
         </div>
     </div>
 </EditForm>
 
 
+<div class="modal fade" id="modalEliminar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Eliminacion</h5>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @if (AutorAEliminar != null)
+                {
+                    <p>Deseas eliminar el siguiente autor?</p>
+                    <p>AutorId:@AutorAEliminar.AutorId</p>
+                    <p>Nombres:@AutorAEliminar.Nombres</p>
+                    <p>Nacionalidad:@AutorAEliminar.Nacionalidad</p>
+                    <p>Fecha de nacimiento:@AutorAEliminar.FechaNacimiento</p>
+                    <p>Sueldo:@AutorAEliminar.Sueldo</p>
+                }
+            </div>
+            <div class="modal-footer text-center mt-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="ConfirmarEliminar"> Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @code {
     [Parameter]
     public int AutorId { get; set; }
-
+    private Autores? AutorAEliminar;
     private Autores autores = new Autores();
+    public List<Autores> ListaAutores = new List<Autores>();
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -76,5 +106,27 @@
             toastService.ShowError("Hubo un problema al modificar el autor.");
         }
 
+    }
+
+    private void mostrarModal(Autores autores)
+    {
+        AutorAEliminar = autores;
+    }
+
+    private async Task ConfirmarEliminar()
+    {
+        if (AutorAEliminar == null)
+        {
+            return;
+        }
+        if (await autoresService.Eliminar(AutorAEliminar.AutorId))
+        {
+            toastService.ShowSuccess("Autor eliminado correctamente.");
+            ListaAutores = await autoresService.GetList(a => a.AutorId > 0);
+        }
+        else
+        {
+            toastService.ShowError("Autor no eliminado.");
+        }
     }
 }
