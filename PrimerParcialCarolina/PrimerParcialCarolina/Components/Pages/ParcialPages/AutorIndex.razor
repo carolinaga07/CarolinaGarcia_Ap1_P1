@@ -6,8 +6,8 @@
 <div class="container">
     <div class="card shadow-lg">
         <div class="card-header d-flex justify-content-between align-content-center mb-4">
-            <h5 class="card-title">Registro de model1</h5>
-            <a href="/autores/create" class="btn btn-primary"><span class="bi bi mt-3"></span>Crear</a>
+            <h5 class="card-title">Registro de Autores</h5>
+            <a href="/autores/create" class="btn btn-primary"><span class="bi bi-plus-circle"></span>Crear</a>
         </div>
 
         <div class="card-body">
@@ -34,7 +34,7 @@
                     <PropertyColumn Property="a => a.Sueldo" title="Sueldo" Sortable="true" />
                     <TemplateColumn>
                         <a href="/autores/edit/@context.AutorId" class="btn btn-outline-primary bi bi-pencil-square"></a>
-                        <button type="button" class="btn btn-outline-danger bi bi-trash" data-bs-toggler="modal" data-bs-target="#modalEliminar" @onclick="()=> mostrarModal(context)"></button>
+                        <button type="button" class="btn btn-outline-danger bi bi-trash" data-bs-toggle="modal" data-bs-target="#modalEliminar" @onclick="()=> mostrarModal(context)"></button>
                     </TemplateColumn>
                 </QuickGrid>
             </div>
@@ -81,7 +81,7 @@
     public List<Autores> ListaAutores = new List<Autores>();
     private Autores? AutorAEliminar;
 
-    public async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         ListaAutores = await autoresService.GetList(a => a.AutorId > 0);
     }
@@ -118,7 +118,7 @@
         if(await autoresService.Eliminar(AutorAEliminar.AutorId))
         {
             toastService.ShowSuccess("Autor eliminado correctamente.");
-            await autoresService.GetList(a => a.AutorId > 0); 
+            ListaAutores = await autoresService.GetList(a => a.AutorId > 0); 
         }
         else
         {

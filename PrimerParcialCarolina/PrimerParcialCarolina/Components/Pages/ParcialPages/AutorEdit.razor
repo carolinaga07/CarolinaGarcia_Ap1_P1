@@ -36,7 +36,7 @@
             </div>
             <div class="card-footer text-center mt-2">
                 <a href="/autores" class="btn btn-secondary"><span class="bi bi-arrow-left"> Volver</span></a>
-                <button type="submit" class="btn btn-primary bi bi-floopy"> Guardar</button>
+                <button type="submit" class="btn btn-primary bi bi-floppy"> Guardar</button>
             </div>
         </div>
     </div>
@@ -49,9 +49,9 @@
 
     private Autores autores = new Autores();
 
-    public async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        autores = await autoresService.Buscar(autores.AutorId);
+        autores = await autoresService.Buscar(AutorId) ?? new Autores();
     }
 
     private async Task Modificar()
