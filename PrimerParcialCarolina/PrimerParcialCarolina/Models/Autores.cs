@@ -9,6 +9,8 @@ namespace PrimerParcialCarolina.Models
         
         [Required(ErrorMessage = "El nombre es obligatorio")]
         public string Nombres { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "La nacionalida es obligatoria")]
         public string Nacionalidad { get; set; } = string.Empty;
         public DateOnly FechaNacimiento { get; set; }
         

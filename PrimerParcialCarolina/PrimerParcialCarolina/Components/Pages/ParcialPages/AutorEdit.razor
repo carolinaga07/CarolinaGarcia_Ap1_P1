@@ -15,15 +15,17 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label class="form-label"><strong>AutorId</strong></label>
-                    <InputNumber class="form-control" @bind-Value="autores.AutorId"></InputNumber>
+                    <InputNumber class="form-control" @bind-Value="autores.AutorId" readonly />
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Nombres</strong></label>
                     <InputText class="form-control" @bind-Value="autores.Nombres"></InputText>
+                    <ValidationMessage For="() => autores.Nombres"></ValidationMessage>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Nacionalidad</strong></label>
                     <InputText class="form-control" @bind-Value="autores.Nacionalidad"></InputText>
+                    <ValidationMessage For="() => autores.Nacionalidad"></ValidationMessage>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Fecha de nacimiento</strong></label>
@@ -32,6 +34,7 @@
                 <div class="mb-3">
                     <label class="form-label"><strong>Sueldo</strong></label>
                     <InputNumber class="form-control" @bind-Value="autores.Sueldo"></InputNumber>
+                    <ValidationMessage For="() => autores.Sueldo"></ValidationMessage>
                 </div>
             </div>
             <div class="card-footer text-center mt-2">
