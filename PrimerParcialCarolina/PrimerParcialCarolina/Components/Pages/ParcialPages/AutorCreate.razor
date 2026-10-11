@@ -29,6 +29,7 @@
                 <div class="mb-3">
                     <label class="form-label"><strong>Fecha de nacimiento</strong></label>
                     <InputDate class="form-control" @bind-Value="autores.FechaNacimiento"></InputDate>
+                    <ValidationMessage For="() => autores.FechaNacimiento"></ValidationMessage>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Sueldo</strong></label>

@@ -12,6 +12,8 @@ namespace PrimerParcialCarolina.Models
 
         [Required(ErrorMessage = "La nacionalida es obligatoria")]
         public string Nacionalidad { get; set; } = string.Empty;
+
+        [Range(typeof(DateOnly), "1900-01-01", "2100-01-01", ErrorMessage =" la fecha de nacimiento es obligatoria")]
         public DateOnly FechaNacimiento { get; set; }
         
         [Range(1,double.MaxValue,ErrorMessage ="El sueldo debe ser mayor a 0")]
