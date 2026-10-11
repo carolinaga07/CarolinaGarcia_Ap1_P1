@@ -50,6 +50,12 @@
 
     private async Task Guardar()
     {
+        if( await autoresService.ExisteNombre(autores.Nombres))
+        {
+            toastService.ShowError("Ya existe un autor con ese nombre");
+            return;
+        }
+       
         var Exito = await autoresService.Guardar(autores);
         if (Exito)
         {

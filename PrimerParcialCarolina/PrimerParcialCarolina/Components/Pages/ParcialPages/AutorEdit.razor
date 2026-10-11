@@ -59,6 +59,12 @@
 
     private async Task Modificar()
     {
+        if (await autoresService.ExisteNombre(autores.Nombres, autores.AutorId))
+        {
+            toastService.ShowError("Ya existe un autor con ese nombre");
+            return;
+        }
+
         var Exito = await autoresService.Guardar(autores);
         if (Exito)
         {
