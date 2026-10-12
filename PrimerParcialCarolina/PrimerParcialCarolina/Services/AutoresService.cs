@@ -59,6 +59,10 @@ namespace PrimerParcialCarolina.Services
             return await contexto.Autores.Where(criterio).AsNoTracking().ToListAsync();
         }
 
-       
+        public async Task<bool> ExisteNombre(string nombres, int autorId = 0)
+        {
+            await using var contexto = await contextFactory.CreateDbContextAsync();
+            return await contexto.Autores.AnyAsync(a => a.Nombres == nombres && a.AutorId != autorId);
+        }
     }
 }

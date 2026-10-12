@@ -24,10 +24,12 @@
                 <div class="mb-3">
                     <label class="form-label"><strong>Nacionalidad</strong></label>
                     <InputText class="form-control" @bind-Value="autores.Nacionalidad"></InputText>
+                    <ValidationMessage For="() => autores.Nacionalidad"></ValidationMessage>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Fecha de nacimiento</strong></label>
                     <InputDate class="form-control" @bind-Value="autores.FechaNacimiento"></InputDate>
+                    <ValidationMessage For="() => autores.FechaNacimiento"></ValidationMessage>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Sueldo</strong></label>
@@ -37,7 +39,7 @@
             </div>
             <div class="card-footer text-center mt-2">
                 <a href="/autores" class="btn btn-secondary"><span class="bi bi-arrow-left"> Volver</span></a>
-                <button type="submit" class="btn btn-primary bi bi-floopy"> Guardar</button>
+                <button type="submit" class="btn btn-primary bi bi-floppy"> Guardar</button>
             </div>
         </div>
     </div>
@@ -49,6 +51,12 @@
 
     private async Task Guardar()
     {
+        if( await autoresService.ExisteNombre(autores.Nombres))
+        {
+            toastService.ShowError("Ya existe un autor con ese nombre");
+            return;
+        }
+       
         var Exito = await autoresService.Guardar(autores);
         if (Exito)
         {

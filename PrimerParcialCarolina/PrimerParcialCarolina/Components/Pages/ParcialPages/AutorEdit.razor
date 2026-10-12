@@ -15,47 +15,85 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label class="form-label"><strong>AutorId</strong></label>
-                    <InputNumber class="form-control" @bind-Value="autores.AutorId"></InputNumber>
+                    <InputNumber class="form-control" @bind-Value="autores.AutorId" readonly />
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Nombres</strong></label>
                     <InputText class="form-control" @bind-Value="autores.Nombres"></InputText>
+                    <ValidationMessage For="() => autores.Nombres"></ValidationMessage>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Nacionalidad</strong></label>
                     <InputText class="form-control" @bind-Value="autores.Nacionalidad"></InputText>
+                    <ValidationMessage For="() => autores.Nacionalidad"></ValidationMessage>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Fecha de nacimiento</strong></label>
                     <InputDate class="form-control" @bind-Value="autores.FechaNacimiento"></InputDate>
+                    <ValidationMessage For="() => autores.FechaNacimiento"></ValidationMessage>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"><strong>Sueldo</strong></label>
                     <InputNumber class="form-control" @bind-Value="autores.Sueldo"></InputNumber>
+                    <ValidationMessage For="() => autores.Sueldo"></ValidationMessage>
                 </div>
             </div>
             <div class="card-footer text-center mt-2">
-                <a href="/autores" class="btn btn-secondary"><span class="bi bi-arrow-left"> Volver</span></a>
-                <button type="submit" class="btn btn-primary bi bi-floopy"> Guardar</button>
+                <a href="/autores" class="btn btn-secondary"><span class="bi bi-arrow-left"> Volver</span></a
+                <button type="button" class="btn btn-outline-danger bi bi-trash" data-bs-toggle="modal" data-bs-target="#modalEliminar"> Eliminar</button>
+                <button type="submit" class="btn btn-primary bi bi-floppy"> Guardar</button>
             </div>
         </div>
     </div>
 </EditForm>
 
 
+<div class="modal fade" id="modalEliminar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Eliminacion</h5>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @if (autores != null)
+                {
+                    <p>Deseas eliminar el siguiente autor?</p>
+                    <p>AutorId:@autores.AutorId</p>
+                    <p>Nombres:@autores.Nombres</p>
+                    <p>Nacionalidad:@autores.Nacionalidad</p>
+                    <p>Fecha de nacimiento:@autores.FechaNacimiento</p>
+                    <p>Sueldo:@autores.Sueldo</p>
+                }
+            </div>
+            <div class="modal-footer text-center mt-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="ConfirmarEliminar"> Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @code {
     [Parameter]
     public int AutorId { get; set; }
-
     private Autores autores = new Autores();
 
-    public async Task OnInitializedAsync()
+
+    protected override async Task OnInitializedAsync()
     {
-        autores = await autoresService.Buscar(autores.AutorId);
+        autores = await autoresService.Buscar(AutorId) ?? new Autores();
     }
 
     private async Task Modificar()
     {
+        if (await autoresService.ExisteNombre(autores.Nombres, autores.AutorId))
+        {
+            toastService.ShowError("Ya existe un autor con ese nombre");
+            return;
+        }
+
         var Exito = await autoresService.Guardar(autores);
         if (Exito)
         {
@@ -67,5 +105,19 @@
             toastService.ShowError("Hubo un problema al modificar el autor.");
         }
 
+    }
+
+    private async Task ConfirmarEliminar()
+    {
+
+        if (await autoresService.Eliminar(autores.AutorId))
+        {
+            toastService.ShowSuccess("Autor eliminado correctamente.");
+            navigationManager.NavigateTo("/autores");
+        }
+        else
+        {
+            toastService.ShowError("Autor no eliminado.");
+        }
     }
 }
